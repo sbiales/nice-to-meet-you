@@ -16,6 +16,7 @@ export default defineNuxtConfig({
   routeRules: {
     '/': { prerender: true },
     '/dashboard/**': { ssr: false },
+    '/onboarding': { ssr: false },
     // All other routes (including /:username) default to SSR
   },
 
