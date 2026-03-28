@@ -25,7 +25,7 @@ async function handleSubmit() {
     if (result?.error) {
       submitError.value = result.error.message ?? 'Sign up failed. Please try again.'
     } else {
-      await router.push('/dashboard')
+      await router.push('/onboarding')
     }
   } catch {
     submitError.value = 'Something went wrong. Please try again.'
