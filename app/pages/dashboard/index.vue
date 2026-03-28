@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'dashboard', ssr: false })
+definePageMeta({ layout: 'dashboard', ssr: false, middleware: 'profile-required' })
 </script>
 
 <template>
