@@ -34,6 +34,7 @@ export default {
       },
       fontFamily: {
         sans: ['DM Sans', 'system-ui', 'sans-serif'],
+        handwriting: ['Caveat', 'cursive'],
       },
     },
   },
