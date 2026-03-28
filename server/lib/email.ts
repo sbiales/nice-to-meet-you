@@ -24,11 +24,20 @@ async function sendViaMailpit(options: SendEmailOptions): Promise<void> {
   })
 }
 
-async function sendViaResend(options: SendEmailOptions): Promise<void> {
-  if (!process.env.RESEND_API_KEY) {
-    throw new Error('RESEND_API_KEY is not set')
+let resendClient: Resend | null = null
+
+function getResendClient(): Resend {
+  if (!resendClient) {
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error('RESEND_API_KEY is not set')
+    }
+    resendClient = new Resend(process.env.RESEND_API_KEY)
   }
-  const resend = new Resend(process.env.RESEND_API_KEY)
+  return resendClient
+}
+
+async function sendViaResend(options: SendEmailOptions): Promise<void> {
+  const resend = getResendClient()
   await resend.emails.send({
     from: options.from ?? 'Nice To Meet You <noreply@nicetomeetyou.app>',
     to: options.to,

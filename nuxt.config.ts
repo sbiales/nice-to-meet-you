@@ -16,18 +16,6 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    // Server-only — never exposed to client
-    databaseUrl: '',
-    s3Endpoint: '',
-    s3AccessKey: '',
-    s3SecretKey: '',
-    s3Bucket: '',
-    resendApiKey: '',
-    smtpHost: '',
-    smtpPort: '',
-    googleClientId: '',
-    googleClientSecret: '',
-    betterAuthSecret: '',
     public: {
       appUrl: '',
     },

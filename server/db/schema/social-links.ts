@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, boolean, integer } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, boolean, integer, timestamp } from 'drizzle-orm/pg-core'
 import { pgEnum } from 'drizzle-orm/pg-core'
 import { profiles } from './profiles'
 
@@ -20,4 +20,5 @@ export const socialLinks = pgTable('social_links', {
   url: text('url').notNull(),
   isVisible: boolean('is_visible').notNull().default(false),
   sortOrder: integer('sort_order').notNull().default(0),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 })

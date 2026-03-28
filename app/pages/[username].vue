@@ -9,6 +9,7 @@ useHead({
 useSeoMeta({
   title: `${username} — Nice To Meet You`,
   ogTitle: `${username} — Nice To Meet You`,
+  ogDescription: `Check out ${username}'s page on Nice To Meet You`,
 })
 
 definePageMeta({ layout: 'default' })

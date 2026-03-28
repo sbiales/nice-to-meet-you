@@ -1,4 +1,4 @@
-import { s3, BUCKET } from '~/server/lib/storage'
+import { s3, BUCKET } from '~~/server/lib/storage'
 import { ListBucketsCommand } from '@aws-sdk/client-s3'
 
 describe('storage client', () => {

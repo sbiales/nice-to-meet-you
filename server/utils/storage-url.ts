@@ -5,5 +5,8 @@
 export function storageUrl(key: string): string {
   const publicUrl = process.env.S3_PUBLIC_URL
   if (!publicUrl) throw new Error('S3_PUBLIC_URL is not set')
-  return `${publicUrl.replace(/\/$/, '')}/${key}`
+  if (!key || key.includes('..') || key.includes('?') || key.includes('#')) {
+    throw new Error(`Invalid storage key: ${key}`)
+  }
+  return `${publicUrl.replace(/\/$/, '')}/${key.replace(/^\//, '')}`
 }
