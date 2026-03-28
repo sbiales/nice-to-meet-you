@@ -180,3 +180,9 @@ Learnings discovered during scaffold setup:
 4. **Server-side imports**: The `~` alias does NOT resolve inside `server/` directory in Nuxt 4. Use relative imports for server-to-server references (e.g., `../../lib/auth` not `~/server/lib/auth`).
 
 5. **TypeScript checking**: Use `npx nuxi typecheck` (not `npx tsc --noEmit`) — Nuxt generates its own tsconfig references.
+
+6. **Env file for local dev**: Nuxt dev only auto-loads `.env`, not `.env.local`. Keep local values in `.env.local` as the source of truth, but copy to `.env` before running: `cp .env.local .env`. Both are gitignored. Never commit `.env`.
+
+7. **Missing peer deps**: `better-auth` requires `@opentelemetry/api` which is not auto-installed. If you see a missing package error from `better-auth/core/dist/instrumentation/tracer.mjs`, run `npm install @opentelemetry/api --legacy-peer-deps`.
+
+8. **Playwright testing required before UI commits**: Any task that touches pages, layouts, or server routes must be verified with Playwright before committing. Use the `mcp__plugin_playwright_playwright__*` tools to navigate pages and confirm they render without errors.
