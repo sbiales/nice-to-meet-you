@@ -166,3 +166,17 @@ created_at        timestamptz
 Integrated print-on-demand purchasing: after generating their QR code, users get a one-click path to order physical items (tote bags, hats, business cards, stickers) with their QR code pre-applied to a design template. The app would earn a cut via a print-on-demand partner API.
 
 Research still needed on partner options (Printful, Printify, Gelato, etc.) — this is intentionally undesigned for now. No schema or API work should be done for this until v1 is shipped.
+
+## Development Notes
+
+Learnings discovered during scaffold setup:
+
+1. **Nuxt 4 directory structure**: The project uses Nuxt 4 (not 3 as originally planned). Client-side code lives under `app/` (app/pages/, app/layouts/, app/components/, app/assets/). Server code stays at `server/`. Config files at root.
+
+2. **npm --legacy-peer-deps**: `better-auth` has a transitive peer dep conflict with Nuxt 4's vite version (via @sveltejs/vite-plugin-svelte). Use `npm install --legacy-peer-deps` when adding packages that conflict.
+
+3. **Docker via WSL**: Docker Desktop is not installed. Docker Engine runs inside WSL2 Ubuntu. From the Windows shell, prefix docker commands with `wsl -e` or `wsl bash -c "..."`. The docker daemon must be started manually: `wsl bash -c "sudo service docker start"`.
+
+4. **Server-side imports**: The `~` alias does NOT resolve inside `server/` directory in Nuxt 4. Use relative imports for server-to-server references (e.g., `../../lib/auth` not `~/server/lib/auth`).
+
+5. **TypeScript checking**: Use `npx nuxi typecheck` (not `npx tsc --noEmit`) — Nuxt generates its own tsconfig references.
