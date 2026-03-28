@@ -6,8 +6,9 @@ definePageMeta({ layout: 'auth', ssr: false })
 const { session } = useAuth()
 const router = useRouter()
 
-// Guard: redirect away if user is not signed in or already has a profile
-onMounted(async () => {
+// Guard: wait for session to load, then redirect if not signed in or already has a profile
+watch(() => session.value?.isPending, async (pending) => {
+  if (pending !== false) return
   if (!session.value?.data?.user) {
     await navigateTo('/signin')
     return
@@ -19,8 +20,9 @@ onMounted(async () => {
     if (error?.statusCode === 401) {
       await navigateTo('/signin')
     }
+    // 404 = no profile yet — stay on this page
   }
-})
+}, { immediate: true })
 
 const user = computed(() => session.value?.data?.user)
 
