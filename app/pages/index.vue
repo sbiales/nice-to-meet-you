@@ -1,88 +1,190 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'default' })
 
-const sagePalette = [
-  { name: '50', class: 'bg-sage-50', hex: '#f2f5f0' },
-  { name: '100', class: 'bg-sage-100', hex: '#e1e8dc' },
-  { name: '200', class: 'bg-sage-200', hex: '#c5d4bc' },
-  { name: '300', class: 'bg-sage-300', hex: '#a3b897' },
-  { name: '400', class: 'bg-sage-400', hex: '#839a76' },
-  { name: '500', class: 'bg-sage-500', hex: '#6e8761' },
-  { name: '600', class: 'bg-sage-600', hex: '#576c4d' },
-  { name: '700', class: 'bg-sage-700', hex: '#455540' },
-  { name: '800', class: 'bg-sage-800', hex: '#3a4636' },
-  { name: '900', class: 'bg-sage-900', hex: '#313b2e' },
-  { name: '950', class: 'bg-sage-950', hex: '#181f17' },
+const valueProps = [
+  {
+    title: 'Privacy-first',
+    body: 'Your email and phone number are never exposed. Anyone who reaches out goes through your page.',
+  },
+  {
+    title: 'No algorithm',
+    body: 'No feed, no matching, no pressure. Just your page, exactly as you made it.',
+  },
+  {
+    title: 'Works for everyone',
+    body: 'Looking for love? New friends? Professional connections? Your page works for all of it.',
+  },
+  {
+    title: 'Free to start',
+    body: 'Create your page and generate your QR code, on us.',
+  },
 ]
 
-const warmPalette = [
-  { name: 'bg', class: 'bg-warm-bg', hex: '#FAFAF8', border: true },
-  { name: 'card', class: 'bg-warm-card', hex: '#FFFFFF', border: true },
-  { name: 'text', class: 'bg-warm-text', hex: '#1A1A17' },
-  { name: 'muted', class: 'bg-warm-muted', hex: '#6B6860' },
-  { name: 'border', class: 'bg-warm-border', hex: '#E5E0D8', border: true },
+const steps = [
+  {
+    number: '1',
+    title: 'Create your page',
+    body: 'Tell your story in your own words. Add photos, your interests, and what you\'re looking for.',
+  },
+  {
+    number: '2',
+    title: 'Generate your QR code',
+    body: 'Download it and print it on whatever you want — your tote bag, your hat, a sticker.',
+  },
+  {
+    number: '3',
+    title: 'Put yourself out there',
+    body: 'Someone scans it, reads your page, and reaches out. No awkward introductions required.',
+  },
 ]
 </script>
 
 <template>
-  <div class="mx-auto max-w-2xl px-6 py-16">
-    <h1 class="text-3xl font-semibold text-warm-text">Nice To Meet You</h1>
-    <p class="mt-2 text-warm-muted">Design token palette sampler</p>
+  <div>
+    <!-- Nav -->
+    <nav class="sticky top-0 z-50 border-b border-warm-border bg-warm-card/95 backdrop-blur">
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <NuxtLink
+          to="/"
+          class="text-xs font-bold tracking-[0.2em] text-warm-text uppercase"
+        >
+          ntmy
+        </NuxtLink>
+        <div class="flex items-center gap-2">
+          <NuxtLink
+            to="/signin"
+            class="rounded-md px-4 py-2 text-sm text-warm-muted transition-colors hover:text-warm-text"
+          >
+            Sign in
+          </NuxtLink>
+          <NuxtLink
+            to="/signup"
+            class="rounded-md bg-sage-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-sage-600"
+          >
+            Get started
+          </NuxtLink>
+        </div>
+      </div>
+    </nav>
 
-    <section class="mt-10">
-      <h2 class="text-lg font-medium text-warm-text">Sage</h2>
-      <div class="mt-3 flex gap-2">
-        <div v-for="swatch in sagePalette" :key="swatch.name" class="flex flex-col items-center gap-1">
+    <!-- Hero -->
+    <section class="relative overflow-hidden bg-sage-400 py-28 text-white md:py-36">
+      <!-- Decorative blobs -->
+      <div
+        class="pointer-events-none absolute -top-32 -right-32 h-[36rem] w-[36rem] rounded-full bg-sage-300 opacity-25 blur-3xl"
+        aria-hidden="true"
+      />
+      <div
+        class="pointer-events-none absolute -bottom-32 -left-32 h-[36rem] w-[36rem] rounded-full bg-sage-600 opacity-25 blur-3xl"
+        aria-hidden="true"
+      />
+
+      <div class="relative z-10 mx-auto max-w-4xl px-6 text-center">
+        <h1 class="font-handwriting text-6xl leading-tight tracking-wide text-white md:text-7xl lg:text-8xl">
+          Nice To Meet You
+        </h1>
+        <p class="mt-4 text-xl italic text-white/90 md:text-2xl">
+          Become approachable without saying a word
+        </p>
+        <p class="mx-auto mt-6 max-w-2xl text-base text-white/80 md:text-lg">
+          Your personal page, your way. Print your QR code, put it in the world,
+          and let people reach out — without ever giving up your contact details.
+        </p>
+        <div class="mt-10 flex flex-wrap justify-center gap-4">
+          <NuxtLink
+            to="/signup"
+            class="rounded-md bg-white px-6 py-3 text-sm font-semibold text-sage-700 shadow-sm transition-colors hover:bg-sage-50"
+          >
+            Create your page
+          </NuxtLink>
+          <a
+            href="#how-it-works"
+            class="rounded-md border border-white/60 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10"
+          >
+            See how it works
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why we made this -->
+    <section class="bg-sage-50 py-24">
+      <div class="mx-auto max-w-3xl px-6">
+        <h2 class="text-center text-3xl font-semibold text-warm-text">
+          Why we made this
+        </h2>
+        <div class="mt-10 space-y-6 text-lg leading-relaxed text-warm-muted">
+          <p>
+            Everyone is online these days — but real connections still happen in person.
+            At the coffee shop, at a concert, on the train. The problem? Walking up to
+            a stranger is hard. Handing someone your number is vulnerable.
+          </p>
+          <p>
+            Nice To Meet You is different. You create a page that represents you — who you
+            are, what you love, what you're looking for. Print a QR code and put it on
+            whatever you want: your tote bag, your hat, your business card. Now when someone
+            notices you, they have a way in — on their own terms.
+          </p>
+          <p>
+            Whether you're looking for love, new friends, or just want a shareable presence
+            when you're out in the world — your page has you covered.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how-it-works" class="bg-warm-bg py-24">
+      <div class="mx-auto max-w-6xl px-6">
+        <h2 class="text-center text-3xl font-semibold text-warm-text">
+          How it works
+        </h2>
+        <div class="mt-16 grid gap-12 md:grid-cols-3">
           <div
-            :class="[swatch.class, 'h-12 w-12 rounded-md shadow-sm']"
-          />
-          <span class="text-[10px] font-medium text-warm-muted">{{ swatch.name }}</span>
-          <span class="text-[9px] text-warm-muted/70">{{ swatch.hex }}</span>
+            v-for="step in steps"
+            :key="step.number"
+            class="flex flex-col items-center text-center"
+          >
+            <span class="font-handwriting text-6xl font-bold text-sage-400">
+              {{ step.number }}
+            </span>
+            <h3 class="mt-3 text-xl font-semibold text-warm-text">{{ step.title }}</h3>
+            <p class="mt-2 text-warm-muted">{{ step.body }}</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="mt-10">
-      <h2 class="text-lg font-medium text-warm-text">Warm</h2>
-      <div class="mt-3 flex gap-2">
-        <div v-for="swatch in warmPalette" :key="swatch.name" class="flex flex-col items-center gap-1">
-          <div
-            :class="[swatch.class, 'h-12 w-12 rounded-md shadow-sm', swatch.border && 'border border-warm-border']"
-          />
-          <span class="text-[10px] font-medium text-warm-muted">{{ swatch.name }}</span>
-          <span class="text-[9px] text-warm-muted/70">{{ swatch.hex }}</span>
+    <!-- Value props -->
+    <section class="bg-warm-card py-24">
+      <div class="mx-auto max-w-6xl px-6">
+        <h2 class="text-center text-3xl font-semibold text-warm-text">
+          Built different
+        </h2>
+        <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <AppCard v-for="prop in valueProps" :key="prop.title" class="flex flex-col gap-2">
+            <h3 class="font-semibold text-warm-text">{{ prop.title }}</h3>
+            <p class="text-sm text-warm-muted">{{ prop.body }}</p>
+          </AppCard>
         </div>
       </div>
     </section>
 
-    <section class="mt-10">
-      <h2 class="text-lg font-medium text-warm-text">Components</h2>
-      <div class="mt-4 space-y-4">
-        <div class="flex flex-wrap gap-3">
-          <AppButton variant="primary">Primary</AppButton>
-          <AppButton variant="secondary">Secondary</AppButton>
-          <AppButton variant="ghost">Ghost</AppButton>
-          <AppButton variant="primary" loading>Loading</AppButton>
+    <!-- Footer -->
+    <footer class="border-t border-warm-border bg-warm-bg py-10">
+      <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6">
+        <p class="text-sm text-warm-muted">
+          © {{ new Date().getFullYear() }} Nice To Meet You
+        </p>
+        <div class="flex gap-4">
+          <NuxtLink to="/signin" class="text-sm text-warm-muted hover:text-warm-text">
+            Sign in
+          </NuxtLink>
+          <NuxtLink to="/signup" class="text-sm text-warm-muted hover:text-warm-text">
+            Get started
+          </NuxtLink>
         </div>
-        <div class="max-w-xs space-y-3">
-          <AppInput label="Default input" placeholder="Placeholder text" />
-          <AppInput label="With error" error="Something went wrong" />
-          <AppInput label="With helper" helper="Helper text goes here" />
-        </div>
-        <AppCard>
-          <p class="text-sm text-warm-muted">This is an AppCard with some content inside.</p>
-        </AppCard>
       </div>
-    </section>
-
-    <section class="mt-10">
-      <h2 class="text-lg font-medium text-warm-text">Typography</h2>
-      <div class="mt-4 space-y-2">
-        <p class="text-2xl font-semibold">DM Sans — Semibold 2xl</p>
-        <p class="text-lg font-medium">DM Sans — Medium lg</p>
-        <p class="text-sm">DM Sans — Regular sm</p>
-        <p class="text-xs text-warm-muted">DM Sans — Muted xs</p>
-      </div>
-    </section>
+    </footer>
   </div>
 </template>
