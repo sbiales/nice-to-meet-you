@@ -2,17 +2,17 @@
 definePageMeta({ layout: 'default' })
 
 const sagePalette = [
-  { name: '50', class: 'bg-sage-50', hex: '#f2f7f3' },
-  { name: '100', class: 'bg-sage-100', hex: '#deeee2' },
-  { name: '200', class: 'bg-sage-200', hex: '#beddca' },
-  { name: '300', class: 'bg-sage-300', hex: '#93c5a9' },
-  { name: '400', class: 'bg-sage-400', hex: '#64a685' },
-  { name: '500', class: 'bg-sage-500', hex: '#6B9E76' },
-  { name: '600', class: 'bg-sage-600', hex: '#4a7d57' },
-  { name: '700', class: 'bg-sage-700', hex: '#3b6446' },
-  { name: '800', class: 'bg-sage-800', hex: '#315139' },
-  { name: '900', class: 'bg-sage-900', hex: '#294330' },
-  { name: '950', class: 'bg-sage-950', hex: '#132419' },
+  { name: '50', class: 'bg-sage-50', hex: '#f2f5f0' },
+  { name: '100', class: 'bg-sage-100', hex: '#e1e8dc' },
+  { name: '200', class: 'bg-sage-200', hex: '#c5d4bc' },
+  { name: '300', class: 'bg-sage-300', hex: '#a3b897' },
+  { name: '400', class: 'bg-sage-400', hex: '#839a76' },
+  { name: '500', class: 'bg-sage-500', hex: '#6e8761' },
+  { name: '600', class: 'bg-sage-600', hex: '#576c4d' },
+  { name: '700', class: 'bg-sage-700', hex: '#455540' },
+  { name: '800', class: 'bg-sage-800', hex: '#3a4636' },
+  { name: '900', class: 'bg-sage-900', hex: '#313b2e' },
+  { name: '950', class: 'bg-sage-950', hex: '#181f17' },
 ]
 
 const warmPalette = [
