@@ -115,11 +115,13 @@ A handwriting-style Google Font for the hero headline and logo. Options to be su
 - Collapses gracefully on mobile (sign in / get started remain visible)
 
 #### 2. Hero
+- **Background:** `sage-400` (`#839a76`). All hero text in white.
+- **Decorative element:** A soft CSS/SVG shape (blob, arc, or swirl) in sage-300 or sage-500 layered behind the text for visual interest. Exact treatment to be iterated on during the design review — implementation should make a first attempt and capture a screenshot.
 - Centered layout, generous vertical padding
 - **Display:** "Nice To Meet You" — large, in the handwriting font. This is the brand statement, not a headline.
-- **Tagline:** "Become approachable without saying a word" — smaller, italic DM Sans, directly beneath the display text
-- **Subheadline:** 1–2 sentences expanding the idea (e.g. "Nice To Meet You gives you a personal page that speaks for you. Print your QR code, put it in the world, and let people reach out on their terms.")
-- **CTAs:** Primary "Create your page" (`/signup`) + Ghost/secondary "See how it works" (smooth-scrolls to How It Works section)
+- **Tagline:** "Become approachable without saying a word" — smaller, italic DM Sans, directly beneath the display text. White.
+- **Subheadline:** 1–2 sentences expanding the idea (e.g. "Nice To Meet You gives you a personal page that speaks for you. Print your QR code, put it in the world, and let people reach out on their terms.") White or white/80.
+- **CTAs:** Primary "Create your page" (`/signup`, white background + sage-700 text) + Ghost/secondary "See how it works" (white border + white text, smooth-scrolls to How It Works section)
 
 #### 3. Why We Made This
 - Lightly tinted sage background (`sage-50` or `sage-100`) to visually separate from hero
