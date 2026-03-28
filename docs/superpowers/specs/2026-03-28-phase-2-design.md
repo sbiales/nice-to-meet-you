@@ -110,13 +110,14 @@ A handwriting-style Google Font for the hero headline and logo. Options to be su
 
 #### 1. Nav Bar
 - Sticky, full-width, `warm-card` background with a subtle bottom border
-- **Left:** Logo — "Nice To Meet You" in the handwriting font, links to `/`
+- **Left:** Minimal wordmark "ntmy" in DM Sans, links to `/`
 - **Right:** Ghost "Sign in" link (`/signin`) + primary "Get started" button (`/signup`)
 - Collapses gracefully on mobile (sign in / get started remain visible)
 
 #### 2. Hero
 - Centered layout, generous vertical padding
-- **Headline:** "Become approachable without saying a word" — large, in the handwriting font
+- **Display:** "Nice To Meet You" — large, in the handwriting font. This is the brand statement, not a headline.
+- **Tagline:** "Become approachable without saying a word" — smaller, italic DM Sans, directly beneath the display text
 - **Subheadline:** 1–2 sentences expanding the idea (e.g. "Nice To Meet You gives you a personal page that speaks for you. Print your QR code, put it in the world, and let people reach out on their terms.")
 - **CTAs:** Primary "Create your page" (`/signup`) + Ghost/secondary "See how it works" (smooth-scrolls to How It Works section)
 
