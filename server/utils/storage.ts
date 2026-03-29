@@ -35,6 +35,10 @@ export async function deleteFile(key: string): Promise<void> {
 }
 
 export function getPublicUrl(key: string): string {
-  const base = (process.env.S3_PUBLIC_URL ?? '').replace(/\/$/, '')
-  return `${base}/${key}`
+  const publicUrl = process.env.S3_PUBLIC_URL
+  if (!publicUrl) throw new Error('S3_PUBLIC_URL is not set')
+  if (!key || key.includes('..') || key.includes('?') || key.includes('#')) {
+    throw new Error(`Invalid storage key: ${key}`)
+  }
+  return `${publicUrl.replace(/\/$/, '')}/${key.replace(/^\//, '')}`
 }
