@@ -70,11 +70,13 @@ export interface QuoteBlockData {
 export interface PhotoSingleBlockData {
   photoId: string
   storageKey: string
-  caption: string
+  caption?: string
+  profileId: string
 }
 
 export interface PhotoCarouselBlockData {
-  photoIds: string[]
+  photos: Array<{ id: string; storageKey: string }>
+  profileId: string
 }
 
 export interface VideoBlockData {
@@ -103,6 +105,7 @@ export interface SocialLink {
   platform: SocialPlatform
   url: string
   label: string
+  isVisible: boolean
 }
 
 export interface SocialLinksBlockData {
@@ -209,14 +212,14 @@ export const BLOCK_META: BlockMeta[] = [
     label: 'Photo',
     description: 'A single photo with optional caption',
     icon: '🖼️',
-    defaultData: { photoId: '', storageKey: '', caption: '' } as PhotoSingleBlockData,
+    defaultData: { photoId: '', storageKey: '', caption: '', profileId: '' } as PhotoSingleBlockData,
   },
   {
     type: 'photo_carousel',
     label: 'Photo Carousel',
     description: 'Multiple photos in a swipeable carousel',
     icon: '🎠',
-    defaultData: { photoIds: [] } as PhotoCarouselBlockData,
+    defaultData: { photos: [], profileId: '' } as PhotoCarouselBlockData,
   },
   {
     type: 'video',

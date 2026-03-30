@@ -53,7 +53,7 @@ export function useProfile() {
 
   function updateBlockData(id: string, data: AnyBlock['data']) {
     blocks.value = blocks.value.map(b =>
-      b.id === id ? { ...b, data } : b
+      b.id === id ? ({ ...b, data }) as AnyBlock : b
     )
   }
 

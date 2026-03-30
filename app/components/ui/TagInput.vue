@@ -30,7 +30,7 @@ function handleKeydown(e: KeyboardEvent) {
     e.preventDefault()
     addTag()
   } else if (e.key === 'Backspace' && !inputValue.value && props.modelValue.length) {
-    removeTag(props.modelValue[props.modelValue.length - 1])
+    removeTag(props.modelValue[props.modelValue.length - 1]!)
   }
 }
 </script>
