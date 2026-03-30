@@ -42,12 +42,12 @@ const editingBlock = computed(() =>
 )
 
 function handlePickerSelect(meta: BlockMeta) {
-  const newBlock: AnyBlock = {
+  const newBlock = {
     id: newBlockId(),
     type: meta.type,
-    width: 'full',
-    data: { ...meta.defaultData } as AnyBlock['data'],
-  }
+    width: 'full' as const,
+    data: { ...meta.defaultData },
+  } as AnyBlock
   addBlock(newBlock)
   showPicker.value = false
   editingBlockId.value = newBlock.id

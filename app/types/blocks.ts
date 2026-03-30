@@ -70,7 +70,8 @@ export interface QuoteBlockData {
 export interface PhotoSingleBlockData {
   photoId: string
   storageKey: string
-  caption: string
+  caption?: string
+  profileId: string
 }
 
 export interface PhotoCarouselBlockData {
@@ -209,7 +210,7 @@ export const BLOCK_META: BlockMeta[] = [
     label: 'Photo',
     description: 'A single photo with optional caption',
     icon: '🖼️',
-    defaultData: { photoId: '', storageKey: '', caption: '' } as PhotoSingleBlockData,
+    defaultData: { photoId: '', storageKey: '', caption: '', profileId: '' } as PhotoSingleBlockData,
   },
   {
     type: 'photo_carousel',
