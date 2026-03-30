@@ -75,7 +75,8 @@ export interface PhotoSingleBlockData {
 }
 
 export interface PhotoCarouselBlockData {
-  photoIds: string[]
+  photos: Array<{ id: string; storageKey: string }>
+  profileId: string
 }
 
 export interface VideoBlockData {
@@ -217,7 +218,7 @@ export const BLOCK_META: BlockMeta[] = [
     label: 'Photo Carousel',
     description: 'Multiple photos in a swipeable carousel',
     icon: '🎠',
-    defaultData: { photoIds: [] } as PhotoCarouselBlockData,
+    defaultData: { photos: [], profileId: '' } as PhotoCarouselBlockData,
   },
   {
     type: 'video',
