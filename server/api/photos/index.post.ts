@@ -1,66 +1,59 @@
-import { uploadFile } from '../../utils/storage'
+import { eq } from 'drizzle-orm'
+import { randomUUID } from 'crypto'
+import { auth } from '../../lib/auth'
 import { db } from '../../db'
 import { photos } from '../../db/schema'
-import { auth } from '../../lib/auth'
-import { randomUUID } from 'crypto'
-import { readMultipartFormData } from 'h3'
+import { profiles } from '../../db/schema'
+import { uploadFile } from '../../utils/storage'
+
+const MAX_BYTES = 5 * 1024 * 1024 // 5 MB
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 
 export default defineEventHandler(async (event) => {
-  // Auth check
   const session = await auth.api.getSession({ headers: event.headers })
   if (!session?.user) {
     throw createError({ statusCode: 401, message: 'Unauthorized' })
   }
 
-  // Parse multipart form data
+  // Derive profileId from the authenticated user — never trust client
+  const profile = await db.query.profiles.findFirst({
+    where: eq(profiles.userId, session.user.id),
+  })
+  if (!profile) {
+    throw createError({ statusCode: 404, message: 'Profile not found' })
+  }
+
   const formData = await readMultipartFormData(event)
   if (!formData) {
     throw createError({ statusCode: 400, message: 'No form data' })
   }
 
   const filePart = formData.find((p) => p.name === 'file')
-  const profileIdPart = formData.find((p) => p.name === 'profileId')
-
   if (!filePart?.data || !filePart.filename) {
     throw createError({ statusCode: 400, message: 'Missing file' })
   }
-  if (!profileIdPart?.data) {
-    throw createError({ statusCode: 400, message: 'Missing profileId' })
+
+  const contentType = filePart.type ?? 'application/octet-stream'
+  if (!ALLOWED_TYPES.includes(contentType)) {
+    throw createError({ statusCode: 415, message: 'Only jpeg, png, webp, or gif allowed' })
   }
 
-  const profileId = profileIdPart.data.toString()
-  const ext = filePart.filename.split('.').pop() ?? 'jpg'
-  const storageKey = `photos/${profileId}/${randomUUID()}.${ext}`
-
-  // Validate file size (5MB max)
-  if (filePart.data.length > 5 * 1024 * 1024) {
-    throw createError({ statusCode: 413, message: 'File too large (max 5MB)' })
+  if (filePart.data.length > MAX_BYTES) {
+    throw createError({ statusCode: 413, message: 'File too large (max 5 MB)' })
   }
 
-  // Validate content type
-  const contentType = filePart.type ?? 'image/jpeg'
-  if (!contentType.startsWith('image/')) {
-    throw createError({ statusCode: 415, message: 'Only image files allowed' })
-  }
+  const ext = filePart.filename.split('.').pop()?.toLowerCase() ?? 'jpg'
+  const storageKey = `photos/${profile.id}/${randomUUID()}.${ext}`
 
-  // Upload to S3/MinIO
   await uploadFile(storageKey, filePart.data, contentType)
 
-  // Insert into DB
   const rows = await db
     .insert(photos)
-    .values({
-      id: randomUUID(),
-      profileId,
-      storageKey,
-      sortOrder: 0,
-    })
+    .values({ id: randomUUID(), profileId: profile.id, storageKey, sortOrder: 0 })
     .returning()
 
   const photo = rows[0]
-  if (!photo) {
-    throw createError({ statusCode: 500, message: 'Failed to insert photo record' })
-  }
+  if (!photo) throw createError({ statusCode: 500, message: 'Insert failed' })
 
   return { id: photo.id, storageKey: photo.storageKey }
 })

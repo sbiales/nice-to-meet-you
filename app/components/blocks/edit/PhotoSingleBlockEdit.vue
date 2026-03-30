@@ -17,9 +17,9 @@ const caption = ref(props.data.caption ?? '')
 
 async function onFileChange(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0]
-  if (!file || !props.data.profileId) return
+  if (!file) return
 
-  const result = await upload(file, props.data.profileId)
+  const result = await upload(file)
   if (result) {
     emit('update', {
       ...props.data,

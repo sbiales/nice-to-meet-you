@@ -2,21 +2,18 @@ export function usePhotoUpload() {
   const uploading = ref(false)
   const error = ref<string | null>(null)
 
-  async function upload(file: File, profileId: string): Promise<{ id: string; storageKey: string } | null> {
+  async function upload(file: File): Promise<{ id: string; storageKey: string } | null> {
     uploading.value = true
     error.value = null
 
     try {
       const formData = new FormData()
       formData.append('file', file)
-      formData.append('profileId', profileId)
 
-      const result = await $fetch<{ id: string; storageKey: string }>('/api/photos', {
+      return await $fetch<{ id: string; storageKey: string }>('/api/photos', {
         method: 'POST',
         body: formData,
       })
-
-      return result
     } catch (err: unknown) {
       error.value = err instanceof Error ? err.message : 'Upload failed'
       return null

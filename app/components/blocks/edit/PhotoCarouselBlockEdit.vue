@@ -13,10 +13,10 @@ function imageUrl(storageKey: string): string {
 
 async function onFilesChange(event: Event) {
   const files = Array.from((event.target as HTMLInputElement).files ?? [])
-  if (!files.length || !props.data.profileId) return
+  if (!files.length) return
 
   const uploads = await Promise.all(
-    files.map((file) => upload(file, props.data.profileId))
+    files.map((file) => upload(file))
   )
 
   const newPhotos = uploads
