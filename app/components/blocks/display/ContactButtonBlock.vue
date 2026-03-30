@@ -1,5 +1,16 @@
+<script setup lang="ts">
+import type { ContactButtonBlockData } from '~/types/blocks'
+
+defineProps<{ data: ContactButtonBlockData }>()
+</script>
+
 <template>
-  <div class="flex h-16 items-center justify-center rounded-lg bg-warm-bg text-sm text-warm-muted">
-    📬 Contact button — coming soon
+  <div class="flex justify-center">
+    <button
+      type="button"
+      class="rounded-lg bg-gray-900 px-8 py-3 text-sm font-semibold text-white hover:bg-gray-700 transition-colors"
+    >
+      {{ data.label || 'Get in touch' }}
+    </button>
   </div>
 </template>
