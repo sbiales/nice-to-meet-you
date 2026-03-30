@@ -105,6 +105,7 @@ export interface SocialLink {
   platform: SocialPlatform
   url: string
   label: string
+  isVisible: boolean
 }
 
 export interface SocialLinksBlockData {
