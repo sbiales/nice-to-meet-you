@@ -185,4 +185,22 @@ Learnings discovered during scaffold setup:
 
 7. **Missing peer deps**: `better-auth` requires `@opentelemetry/api` which is not auto-installed. If you see a missing package error from `better-auth/core/dist/instrumentation/tracer.mjs`, run `npm install @opentelemetry/api --legacy-peer-deps`.
 
-8. **Playwright testing required before UI commits**: Any task that touches pages, layouts, or server routes must be verified with Playwright before committing. Use the `mcp__plugin_playwright_playwright__*` tools to navigate pages and confirm they render without errors.
+8. **Playwright testing at phase end only**: Run Playwright verification once at the end of a phase — not after individual tasks. Use the `mcp__plugin_playwright_playwright__*` tools to navigate pages and confirm everything renders without errors before creating the PR.
+
+## Implementation Workflow
+
+Rules for executing implementation phases. These override skill defaults.
+
+1. **Always use subagent-driven development**: All phases must be executed using the `superpowers:subagent-driven-development` skill. Never implement tasks directly in the main context.
+
+2. **Spec compliance review per task; no per-task code quality review**: After each task, dispatch a spec compliance reviewer (haiku model). Skip the per-task code quality review — run a single code quality review at the very end after all tasks are complete.
+
+3. **Use haiku for spec compliance reviewers**: Spec compliance review is mechanical. Always use `model: "haiku"` when dispatching spec reviewer subagents.
+
+4. **Keep orchestration in the orchestrator**: Never investigate bugs, read files, or reason through problems in the main context. If something goes wrong mid-run, dispatch a dedicated fix subagent with specific instructions.
+
+5. **Phase completion checklist** — in order:
+   - Run `npm test` and `npx nuxi typecheck` — must be clean
+   - Run Playwright verification (once, at the end)
+   - Push branch and open a PR with a meaningful description covering all changes
+   - Kill the dev server: `npx kill-port 3000` (it is always still running)

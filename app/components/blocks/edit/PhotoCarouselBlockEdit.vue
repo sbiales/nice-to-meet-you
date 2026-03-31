@@ -2,7 +2,7 @@
 import type { PhotoCarouselBlockData } from '~/types/blocks'
 
 const props = defineProps<{ data: PhotoCarouselBlockData }>()
-const emit = defineEmits<{ (e: 'update', data: PhotoCarouselBlockData): void }>()
+const emit = defineEmits<{ 'update:data': [data: PhotoCarouselBlockData] }>()
 
 const { uploading, error, upload, remove } = usePhotoUpload()
 const config = useRuntimeConfig()
@@ -23,7 +23,7 @@ async function onFilesChange(event: Event) {
     .filter((r): r is { id: string; storageKey: string } => r !== null)
     .map((r) => ({ id: r.id, storageKey: r.storageKey }))
 
-  emit('update', {
+  emit('update:data', {
     ...props.data,
     photos: [...props.data.photos, ...newPhotos],
   })
@@ -31,7 +31,7 @@ async function onFilesChange(event: Event) {
 
 async function removePhoto(photoId: string) {
   await remove(photoId)
-  emit('update', {
+  emit('update:data', {
     ...props.data,
     photos: props.data.photos.filter((p) => p.id !== photoId),
   })

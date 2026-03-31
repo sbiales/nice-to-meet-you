@@ -3,7 +3,7 @@ import { parseVideoUrl } from '~/utils/video'
 import type { VideoBlockData } from '~/types/blocks'
 
 const props = defineProps<{ data: VideoBlockData }>()
-const emit = defineEmits<{ (e: 'update', data: VideoBlockData): void }>()
+const emit = defineEmits<{ 'update:data': [data: VideoBlockData] }>()
 
 const url = ref(props.data.url)
 const parseResult = computed(() => parseVideoUrl(url.value))
@@ -11,7 +11,7 @@ const isValid = computed(() => parseResult.value !== null || !url.value)
 
 function onInput(value: string) {
   url.value = value
-  emit('update', { ...props.data, url: value })
+  emit('update:data', { ...props.data, url: value })
 }
 </script>
 
