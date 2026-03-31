@@ -2,13 +2,13 @@
 import type { ContactButtonBlockData } from '~/types/blocks'
 
 const props = defineProps<{ data: ContactButtonBlockData }>()
-const emit = defineEmits<{ (e: 'update', data: ContactButtonBlockData): void }>()
+const emit = defineEmits<{ 'update:data': [data: ContactButtonBlockData] }>()
 
 const label = ref(props.data.label)
 
 function onInput(value: string) {
   label.value = value
-  emit('update', { ...props.data, label: value })
+  emit('update:data', { ...props.data, label: value })
 }
 </script>
 

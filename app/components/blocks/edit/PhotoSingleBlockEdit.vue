@@ -2,7 +2,7 @@
 import type { PhotoSingleBlockData } from '~/types/blocks'
 
 const props = defineProps<{ data: PhotoSingleBlockData }>()
-const emit = defineEmits<{ (e: 'update', data: PhotoSingleBlockData): void }>()
+const emit = defineEmits<{ 'update:data': [data: PhotoSingleBlockData] }>()
 
 const { uploading, error, upload } = usePhotoUpload()
 const config = useRuntimeConfig()
@@ -21,7 +21,7 @@ async function onFileChange(event: Event) {
 
   const result = await upload(file)
   if (result) {
-    emit('update', {
+    emit('update:data', {
       ...props.data,
       storageKey: result.storageKey,
     })
@@ -30,7 +30,7 @@ async function onFileChange(event: Event) {
 
 function onCaptionInput(value: string) {
   caption.value = value
-  emit('update', { ...props.data, caption: value })
+  emit('update:data', { ...props.data, caption: value })
 }
 </script>
 

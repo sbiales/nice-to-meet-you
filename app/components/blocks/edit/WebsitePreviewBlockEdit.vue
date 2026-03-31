@@ -2,7 +2,7 @@
 import type { WebsitePreviewBlockData } from '~/types/blocks'
 
 const props = defineProps<{ data: WebsitePreviewBlockData }>()
-const emit = defineEmits<{ (e: 'update', data: WebsitePreviewBlockData): void }>()
+const emit = defineEmits<{ 'update:data': [data: WebsitePreviewBlockData] }>()
 
 const url = ref(props.data.url)
 
@@ -18,7 +18,7 @@ function isValidUrl(value: string): boolean {
 
 function onInput(value: string) {
   url.value = value
-  emit('update', { ...props.data, url: value })
+  emit('update:data', { ...props.data, url: value })
 }
 </script>
 
