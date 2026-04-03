@@ -10,6 +10,10 @@ export function useProfile() {
   const profile = ref<Record<string, unknown> | null>(null)
   const blocks = ref<AnyBlock[]>([])
   const theme = ref<Theme>({ ...DEFAULT_THEME })
+  const displayName = ref<string>('')
+  const taglinePrefix = ref<string | null>(null)
+  const headerImageKey = ref<string | null>(null)
+  const headerUploading = ref(false)
   const saveStatus = ref<SaveStatus>('idle')
   let saveTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -20,14 +24,23 @@ export function useProfile() {
     theme.value = data.theme && Object.keys(data.theme as object).length
       ? (data.theme as Theme)
       : { ...DEFAULT_THEME }
+    displayName.value = typeof data.displayName === 'string' ? data.displayName : ''
+    taglinePrefix.value = typeof data.taglinePrefix === 'string' ? data.taglinePrefix : null
+    headerImageKey.value = typeof data.headerImageKey === 'string' ? data.headerImageKey : null
   }
 
   async function save() {
+    if (!displayName.value.trim()) return
     saveStatus.value = 'saving'
     try {
       await $fetch('/api/profiles/me', {
         method: 'PATCH',
-        body: { blocks: blocks.value, theme: theme.value },
+        body: {
+          blocks: blocks.value,
+          theme: theme.value,
+          taglinePrefix: taglinePrefix.value,
+          displayName: displayName.value.trim(),
+        },
       })
       saveStatus.value = 'saved'
       setTimeout(() => {
@@ -43,9 +56,25 @@ export function useProfile() {
     saveTimer = setTimeout(save, 1500)
   }
 
-  // Auto-save whenever blocks or theme change
   watch(blocks, scheduleSave, { deep: true })
   watch(theme, scheduleSave, { deep: true })
+  watch(taglinePrefix, scheduleSave)
+  watch(displayName, scheduleSave)
+
+  async function uploadHeaderImage(file: File) {
+    headerUploading.value = true
+    try {
+      const form = new FormData()
+      form.append('file', file)
+      const result = await $fetch<{ storageKey: string }>('/api/profiles/header-image', {
+        method: 'POST',
+        body: form,
+      })
+      headerImageKey.value = result.storageKey
+    } finally {
+      headerUploading.value = false
+    }
+  }
 
   function addBlock(block: AnyBlock) {
     blocks.value = [...blocks.value, block]
@@ -75,6 +104,14 @@ export function useProfile() {
     theme.value = t
   }
 
+  function setTaglinePrefix(value: string | null) {
+    taglinePrefix.value = value
+  }
+
+  function setDisplayName(value: string) {
+    displayName.value = value
+  }
+
   function existingBlockTypes(): BlockType[] {
     return blocks.value.map(b => b.type)
   }
@@ -87,14 +124,21 @@ export function useProfile() {
     profile,
     blocks,
     theme,
+    displayName,
+    taglinePrefix,
+    headerImageKey,
+    headerUploading,
     saveStatus,
     loadProfile,
+    uploadHeaderImage,
     addBlock,
     updateBlockData,
     updateBlockWidth,
     removeBlock,
     reorderBlocks,
     setTheme,
+    setTaglinePrefix,
+    setDisplayName,
     existingBlockTypes,
     newBlockId,
   }
