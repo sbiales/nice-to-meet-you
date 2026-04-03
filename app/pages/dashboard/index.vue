@@ -1,6 +1,5 @@
 <!-- app/pages/dashboard/index.vue -->
 <script setup lang="ts">
-import { v4 as uuid } from 'uuid'
 import { applyTheme } from '~/types/theme'
 import type { BlockMeta, AnyBlock } from '~/types/blocks'
 
@@ -9,6 +8,10 @@ definePageMeta({ layout: 'dashboard', ssr: false, middleware: 'profile-required'
 const {
   blocks,
   theme,
+  displayName,
+  taglinePrefix,
+  headerImageKey,
+  headerUploading,
   saveStatus,
   loadProfile,
   addBlock,
@@ -17,20 +20,20 @@ const {
   removeBlock,
   reorderBlocks,
   setTheme,
+  setTaglinePrefix,
+  setDisplayName,
+  uploadHeaderImage,
   existingBlockTypes,
   newBlockId,
 } = useProfile()
 
-// Expose saveStatus to layout via provide so the nav can show it
 provide('saveStatus', saveStatus)
 
-// Apply theme CSS vars to the canvas whenever theme changes
 const canvasRef = ref<HTMLElement | null>(null)
 watchEffect(() => {
   if (canvasRef.value) applyTheme(canvasRef.value, theme.value)
 })
 
-// UI state
 const showPicker = ref(false)
 const editingBlockId = ref<string | null>(null)
 const showTheme = ref(false)
@@ -57,6 +60,10 @@ function handleUpdateData(id: string, data: AnyBlock['data']) {
   updateBlockData(id, data)
 }
 
+async function handleHeaderImageUpload(file: File) {
+  await uploadHeaderImage(file)
+}
+
 onMounted(loadProfile)
 </script>
 
@@ -69,7 +76,19 @@ onMounted(loadProfile)
         class="min-h-full p-6 transition-colors duration-500"
         :style="{ backgroundColor: theme.backgroundColor }"
       >
-        <div class="mx-auto max-w-2xl">
+        <div class="mx-auto max-w-2xl space-y-6">
+          <!-- Profile header -->
+          <ProfileHeader
+            :display-name="displayName"
+            :tagline-prefix="taglinePrefix"
+            :header-image-key="headerImageKey"
+            :theme="theme"
+            :uploading="headerUploading"
+            @update:tagline-prefix="setTaglinePrefix"
+            @update:display-name="setDisplayName"
+            @upload-header-image="handleHeaderImageUpload"
+          />
+
           <!-- Empty state -->
           <div
             v-if="blocks.length === 0"
@@ -89,7 +108,7 @@ onMounted(loadProfile)
           />
 
           <!-- Add block button (when blocks exist) -->
-          <div v-if="blocks.length > 0" class="mt-6 text-center">
+          <div v-if="blocks.length > 0" class="text-center">
             <AppButton variant="secondary" @click="showPicker = true">
               + Add block
             </AppButton>
