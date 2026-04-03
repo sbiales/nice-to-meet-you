@@ -27,6 +27,20 @@ export default defineEventHandler(async (event) => {
     updates.theme = body.theme
   }
 
+  if (body?.taglinePrefix !== undefined) {
+    if (body.taglinePrefix !== null && typeof body.taglinePrefix !== 'string') {
+      throw createError({ statusCode: 400, message: 'taglinePrefix must be a string or null' })
+    }
+    updates.taglinePrefix = body.taglinePrefix
+  }
+
+  if (body?.displayName !== undefined) {
+    if (typeof body.displayName !== 'string' || body.displayName.trim() === '') {
+      throw createError({ statusCode: 400, message: 'displayName must be a non-empty string' })
+    }
+    updates.displayName = body.displayName.trim()
+  }
+
   const [updated] = await db.update(profiles)
     .set(updates)
     .where(eq(profiles.userId, session.user.id))

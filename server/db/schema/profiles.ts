@@ -18,6 +18,7 @@ export const profiles = pgTable('profiles', {
   displayName: text('display_name').notNull(),
   status: profileStatusEnum('status').notNull().default('active'),
   headerImageKey: text('header_image_key'),
+  taglinePrefix: text('tagline_prefix'),
   theme: jsonb('theme').notNull().default({}),
   blocks: jsonb('blocks').notNull().default([]),
   isContactable: boolean('is_contactable').notNull().default(true),
