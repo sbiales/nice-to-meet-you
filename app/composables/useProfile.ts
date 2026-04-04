@@ -13,6 +13,8 @@ export function useProfile() {
   const displayName = ref<string>('')
   const taglinePrefix = ref<string | null>(null)
   const headerImageKey = ref<string | null>(null)
+  const username = ref<string>('')
+  const status = ref<'active' | 'paused' | 'taken'>('active')
   const headerUploading = ref(false)
   const saveStatus = ref<SaveStatus>('idle')
   let saveTimer: ReturnType<typeof setTimeout> | null = null
@@ -27,6 +29,10 @@ export function useProfile() {
     displayName.value = typeof data.displayName === 'string' ? data.displayName : ''
     taglinePrefix.value = typeof data.taglinePrefix === 'string' ? data.taglinePrefix : null
     headerImageKey.value = typeof data.headerImageKey === 'string' ? data.headerImageKey : null
+    username.value = typeof data.username === 'string' ? data.username : ''
+    status.value = (typeof data.status === 'string' && ['active', 'paused', 'taken'].includes(data.status))
+      ? (data.status as 'active' | 'paused' | 'taken')
+      : 'active'
   }
 
   async function save() {
@@ -40,6 +46,7 @@ export function useProfile() {
           theme: theme.value,
           taglinePrefix: taglinePrefix.value,
           displayName: displayName.value.trim(),
+          status: status.value,
         },
       })
       saveStatus.value = 'saved'
@@ -60,6 +67,7 @@ export function useProfile() {
   watch(theme, scheduleSave, { deep: true })
   watch(taglinePrefix, scheduleSave)
   watch(displayName, scheduleSave)
+  watch(status, scheduleSave)
 
   async function uploadHeaderImage(file: File) {
     headerUploading.value = true
@@ -127,6 +135,8 @@ export function useProfile() {
     displayName,
     taglinePrefix,
     headerImageKey,
+    username,
+    status,
     headerUploading,
     saveStatus,
     loadProfile,
