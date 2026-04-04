@@ -41,6 +41,13 @@ export default defineEventHandler(async (event) => {
     updates.displayName = body.displayName.trim()
   }
 
+  if (body?.status !== undefined) {
+    if (typeof body.status !== 'string' || !['active', 'paused', 'taken'].includes(body.status)) {
+      throw createError({ statusCode: 400, message: 'status must be active, paused, or taken' })
+    }
+    updates.status = body.status as 'active' | 'paused' | 'taken'
+  }
+
   const [updated] = await db.update(profiles)
     .set(updates)
     .where(eq(profiles.userId, session.user.id))
