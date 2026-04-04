@@ -18,6 +18,12 @@ async function handleSignOut() {
           <span v-if="saveStatus === 'saving'" class="text-xs text-warm-muted">Saving…</span>
           <span v-else-if="saveStatus === 'saved'" class="text-xs text-sage-600">Saved ✓</span>
           <span v-else-if="saveStatus === 'error'" class="text-xs text-red-500">Failed to save</span>
+          <NuxtLink
+            to="/dashboard/settings"
+            class="text-sm text-warm-muted transition-colors hover:text-warm-text"
+          >
+            Settings
+          </NuxtLink>
           <button
             class="text-sm text-warm-muted transition-colors hover:text-warm-text"
             @click="handleSignOut"
