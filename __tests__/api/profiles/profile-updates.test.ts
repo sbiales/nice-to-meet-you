@@ -1,4 +1,4 @@
-// __tests__/api/profiles/me-patch.test.ts
+// __tests__/api/profiles/profile-updates.test.ts
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { eq } from 'drizzle-orm'
 import { db } from '~~/server/db'
@@ -98,5 +98,43 @@ describe('profile blocks and theme persistence', () => {
     expect(saved[0].id).toBe('b1')
     expect(saved[1].id).toBe('b2')
     expect(saved[2].id).toBe('b3')
+  })
+})
+
+describe('profile status persistence', () => {
+  it('updates status to paused', async () => {
+    await db.update(profiles)
+      .set({ status: 'paused', updatedAt: new Date() })
+      .where(eq(profiles.userId, TEST_USER_ID))
+
+    const row = await db.query.profiles.findFirst({
+      where: eq(profiles.userId, TEST_USER_ID),
+    })
+
+    expect(row?.status).toBe('paused')
+  })
+
+  it('updates status to taken', async () => {
+    await db.update(profiles)
+      .set({ status: 'taken', updatedAt: new Date() })
+      .where(eq(profiles.userId, TEST_USER_ID))
+
+    const row = await db.query.profiles.findFirst({
+      where: eq(profiles.userId, TEST_USER_ID),
+    })
+
+    expect(row?.status).toBe('taken')
+  })
+
+  it('updates status back to active', async () => {
+    await db.update(profiles)
+      .set({ status: 'active', updatedAt: new Date() })
+      .where(eq(profiles.userId, TEST_USER_ID))
+
+    const row = await db.query.profiles.findFirst({
+      where: eq(profiles.userId, TEST_USER_ID),
+    })
+
+    expect(row?.status).toBe('active')
   })
 })
