@@ -1,8 +1,10 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'dashboard', ssr: false, middleware: 'profile-required' })
 
-const { username, status, loadProfile } = useProfile()
+const { username, status, saveStatus, loadProfile } = useProfile()
 const { session } = useAuth()
+
+provide('saveStatus', saveStatus)
 
 const config = useRuntimeConfig()
 
