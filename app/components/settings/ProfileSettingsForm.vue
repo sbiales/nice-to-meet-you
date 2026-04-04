@@ -22,6 +22,10 @@ const selectedStatus = computed({
   get: () => props.status,
   set: (value) => emit('update:status', value),
 })
+
+function copyUrl() {
+  window.navigator.clipboard.writeText(props.publicUrl)
+}
 </script>
 
 <template>
@@ -56,7 +60,7 @@ const selectedStatus = computed({
         />
         <button
           class="px-3 py-2 rounded-lg bg-warm-text text-white text-sm font-medium hover:opacity-90 transition-opacity"
-          @click="navigator.clipboard.writeText(publicUrl)"
+          @click="copyUrl"
         >
           Copy
         </button>
