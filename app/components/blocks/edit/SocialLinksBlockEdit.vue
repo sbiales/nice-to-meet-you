@@ -2,7 +2,7 @@
 import type { SocialLinksBlockData, SocialLink, SocialPlatform } from '~/types/blocks'
 
 const props = defineProps<{ data: SocialLinksBlockData }>()
-const emit = defineEmits<{ (e: 'update', data: SocialLinksBlockData): void }>()
+const emit = defineEmits<{ 'update:data': [data: SocialLinksBlockData] }>()
 
 const ALL_PLATFORMS: SocialPlatform[] = [
   'instagram', 'spotify', 'linkedin', 'twitter', 'tiktok', 'youtube', 'website', 'other',
@@ -28,7 +28,7 @@ const links = ref<SocialLink[]>(
 )
 
 function emitUpdate() {
-  emit('update', { links: links.value.map((l) => ({ ...l })) })
+  emit('update:data', { links: links.value.map((l) => ({ ...l })) })
 }
 
 function toggleVisible(index: number) {
