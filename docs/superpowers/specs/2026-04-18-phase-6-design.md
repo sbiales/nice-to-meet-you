@@ -65,7 +65,7 @@ Add "Generate QR" link to the dashboard header to the left of the existing "Sett
 
 - Fetches the user's username via `useProfile` (already loads profile data).
 - Client-side renders a QR code onto a `<canvas>` element using the `qrcode` npm package.
-- QR encodes: `https://nicetomeetyou.app/[username]`
+- QR encodes: `${config.public.appUrl}/${username}` — same computed URL as the settings page, using `useRuntimeConfig()` so it works across environments and stays in sync if the username changes
 - QR options: 300×300px, error correction level M.
 - Displays the profile URL as text below the QR for reference.
 - "Download PNG" button: calls `canvas.toDataURL('image/png')`, creates a temporary `<a>` element, triggers download as `nicetomeetyou-[username].png`.
