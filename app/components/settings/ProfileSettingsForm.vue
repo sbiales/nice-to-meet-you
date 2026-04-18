@@ -59,7 +59,10 @@ watch(newSlug, (val) => {
   slugAvailable.value = null
   slugError.value = ''
   if (slugDebounceTimer) clearTimeout(slugDebounceTimer)
-  if (!val || !slugValidation.value.valid || val === props.slug) return
+  if (!val || !slugValidation.value.valid || val === props.slug) {
+    checkingSlug.value = false
+    return
+  }
 
   checkingSlug.value = true
   slugDebounceTimer = setTimeout(async () => {
@@ -161,7 +164,7 @@ function copyUrl() {
               autocomplete="off"
               autocapitalize="none"
               spellcheck="false"
-              placeholder="your-slug"
+              placeholder="your_slug"
               class="w-full rounded-lg border border-warm-border px-3 py-2 text-sm text-warm-text focus:outline-none focus:ring-2 focus:ring-warm-text"
             />
           </div>
