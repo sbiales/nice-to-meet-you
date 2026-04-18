@@ -31,4 +31,24 @@ describe('database schema', () => {
     const result = await db.select().from(reports).limit(1)
     expect(Array.isArray(result)).toBe(true)
   })
+
+  it('slug column exists and is unique', async () => {
+    const result = await db.query.profiles.findFirst()
+    if (result) {
+      expect(typeof result.slug).toBe('string')
+      expect(result.slug.length).toBeGreaterThan(0)
+    }
+    // Duplicate slug insert should throw
+    const rows = await db.select().from(profiles).limit(1)
+    if (rows.length > 0) {
+      await expect(
+        db.insert(profiles).values({
+          userId: 'dupe-slug-test',
+          username: 'dupe_slug_username_test',
+          slug: rows[0].slug,
+          displayName: 'Dupe Slug',
+        })
+      ).rejects.toThrow()
+    }
+  })
 })

@@ -15,6 +15,13 @@
       "when": 1775177746044,
       "tag": "0001_absent_bedlam",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1776534620940,
+      "tag": "0002_tough_robin_chapel",
+      "breakpoints": true
     }
   ]
 }

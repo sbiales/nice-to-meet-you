@@ -14,9 +14,9 @@ const TEST_BLOCKS: AnyBlock[] = [
 ]
 
 // Helper that replicates the endpoint's query + stripping logic
-async function queryPublicProfile(username: string) {
+async function queryPublicProfile(slug: string) {
   const row = await db.query.profiles.findFirst({
-    where: eq(profiles.username, username),
+    where: eq(profiles.slug, slug),
   })
   if (!row) return null
   return {
@@ -38,6 +38,7 @@ beforeAll(async () => {
   await db.insert(profiles).values({
     userId: TEST_USER_ID,
     username: TEST_USERNAME,
+    slug: TEST_USERNAME,
     displayName: 'Public Profile Test',
     blocks: TEST_BLOCKS as any,
   }).onConflictDoNothing()

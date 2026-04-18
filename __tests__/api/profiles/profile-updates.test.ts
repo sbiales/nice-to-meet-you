@@ -23,6 +23,7 @@ beforeAll(async () => {
   await db.insert(profiles).values({
     userId: TEST_USER_ID,
     username: TEST_USERNAME,
+    slug: TEST_USERNAME,
     displayName: 'Patch Test User',
   }).onConflictDoNothing()
 })

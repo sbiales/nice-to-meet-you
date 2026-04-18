@@ -15,6 +15,7 @@ export const profiles = pgTable('profiles', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: text('user_id').notNull().unique().references(() => user.id, { onDelete: 'cascade' }),
   username: text('username').notNull().unique(),
+  slug: text('slug').notNull().unique(),
   displayName: text('display_name').notNull(),
   status: profileStatusEnum('status').notNull().default('active'),
   headerImageKey: text('header_image_key'),
