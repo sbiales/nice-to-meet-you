@@ -54,7 +54,7 @@ useSeoMeta({
   description: ogDescription,
   ogDescription: ogDescription,
   ogImage: ogImage,
-  ogUrl: `https://nicetomeetyou.app/${username}`,
+  ogUrl: `${config.public.appUrl}/${username}`,
 })
 
 // Apply theme CSS vars on the client after mount

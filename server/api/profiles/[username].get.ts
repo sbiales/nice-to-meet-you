@@ -3,13 +3,13 @@ import { db } from '../../db'
 import { profiles } from '../../db/schema/profiles'
 
 export default defineEventHandler(async (event) => {
-  const username = getRouterParam(event, 'username')
-  if (!username) {
-    throw createError({ statusCode: 400, message: 'Username required' })
+  const slug = getRouterParam(event, 'username')
+  if (!slug) {
+    throw createError({ statusCode: 400, message: 'Slug required' })
   }
 
   const profile = await db.query.profiles.findFirst({
-    where: eq(profiles.username, username),
+    where: eq(profiles.slug, slug),
   })
 
   if (!profile || profile.deletedAt) {
