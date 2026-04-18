@@ -21,13 +21,12 @@ if (!profile.value) {
 }
 
 const theme = computed(() => profile.value?.theme as Theme)
-const blocks = computed(() =>
-  (profile.value?.blocks as AnyBlock[] ?? []).filter(b => b.type !== 'contact_button')
-)
+const blocks = computed(() => profile.value?.blocks as AnyBlock[] ?? [])
 const status = computed(() => profile.value?.status as 'active' | 'taken' | 'paused')
 const displayName = computed(() => profile.value?.displayName as string ?? '')
 const taglinePrefix = computed(() => profile.value?.taglinePrefix as string | null ?? null)
 const headerImageKey = computed(() => profile.value?.headerImageKey as string | null ?? null)
+const isContactable = computed(() => profile.value?.isContactable as boolean ?? false)
 
 // OG tags — set from SSR data
 const bioBlock = computed(() => blocks.value.find(b => b.type === 'bio'))
@@ -107,6 +106,11 @@ watch(theme, (t) => {
           :block="block"
         />
       </div>
+
+      <ContactForm
+        v-if="isContactable && status === 'active'"
+        :username="username"
+      />
 
       <ProfileStamp v-if="status === 'taken'" status="taken" />
     </template>
