@@ -7,27 +7,31 @@ A personal landing page creator for real-world social discovery. Print a QR code
 ### Prerequisites
 
 - Node.js 20+
-- Docker Engine running in WSL2 Ubuntu (`wsl bash -c "sudo service docker start"`)
+- Docker Engine running in WSL2 Ubuntu
+
+> **Windows note**: Docker runs inside WSL2. Open Ubuntu and run `sudo service docker start` — keep that window open while developing (closing it stops the Docker daemon). All other commands run normally in PowerShell.
 
 ### First-time setup
 
-All commands assume you're in the project root.
+All commands run in PowerShell from the project root, except the Docker daemon start.
 
 ```bash
-# 1. Install dependencies
-npm install
+# 1. Open Ubuntu and start the Docker daemon (keep the window open)
+sudo service docker start
 
-# 2. Set up local environment
-cp .env.local .env
-
-# 3. Start backing services (Postgres, MinIO, Mailpit)
+# 2. Back in PowerShell — start backing services
 wsl -e docker compose up -d
 
-# 4. Run database migrations
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/nicetomeetyou npm run db:migrate
+# 3. Install dependencies
+npm install
 
-# 5. Create the MinIO storage bucket and allow unauthenticated reads
-#    Bucket name must match S3_BUCKET in your .env (default: nicetomeetyou)
+# 4. Set up local environment
+cp .env.local .env
+
+# 5. Run database migrations (.env provides DATABASE_URL)
+npm run db:migrate
+
+# 6. Create the MinIO storage bucket and allow unauthenticated reads
 wsl -e docker compose exec minio mc mb local/nicetomeetyou
 wsl -e docker compose exec minio mc anonymous set download local/nicetomeetyou
 ```
@@ -35,10 +39,11 @@ wsl -e docker compose exec minio mc anonymous set download local/nicetomeetyou
 ### Daily startup
 
 ```bash
-# Start Docker services (if not already running)
-wsl -e docker compose up -d
+# In Ubuntu: start the Docker daemon (keep the window open)
+sudo service docker start
 
-# Start the app
+# In PowerShell: start backing services and the app
+wsl -e docker compose up -d
 npm run dev
 ```
 
