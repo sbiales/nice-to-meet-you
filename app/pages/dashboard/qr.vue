@@ -4,10 +4,8 @@ import QRCode from 'qrcode'
 
 definePageMeta({ layout: 'dashboard', ssr: false, middleware: 'profile-required' })
 
-const { username, saveStatus, loadProfile } = useProfile()
+const { username, loadProfile } = useProfile()
 const config = useRuntimeConfig()
-
-provide('saveStatus', saveStatus)
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const profileUrl = computed(() => `${config.public.appUrl}/${username.value}`)
@@ -39,7 +37,7 @@ onMounted(async () => {
     <div class="flex flex-col items-center gap-6 rounded-2xl border border-warm-border bg-warm-card p-10 shadow-sm">
       <h1 class="text-2xl font-bold text-warm-text">Your QR Code</h1>
       <canvas ref="canvasRef" class="rounded-lg" />
-      <p class="text-sm text-warm-muted">{{ profileUrl }}</p>
+      <p v-if="username" class="text-sm text-warm-muted">{{ profileUrl }}</p>
       <button
         class="rounded-lg bg-gray-900 px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-700"
         @click="downloadPNG"
