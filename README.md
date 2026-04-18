@@ -11,6 +11,8 @@ A personal landing page creator for real-world social discovery. Print a QR code
 
 ### First-time setup
 
+All commands assume you're in the project root.
+
 ```bash
 # 1. Install dependencies
 npm install
@@ -23,6 +25,11 @@ wsl -e docker compose up -d
 
 # 4. Run database migrations
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/nicetomeetyou npm run db:migrate
+
+# 5. Create the MinIO storage bucket and allow unauthenticated reads
+#    Bucket name must match S3_BUCKET in your .env (default: nicetomeetyou)
+wsl -e docker compose exec minio mc mb local/nicetomeetyou
+wsl -e docker compose exec minio mc anonymous set download local/nicetomeetyou
 ```
 
 ### Daily startup
