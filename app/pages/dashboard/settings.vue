@@ -1,14 +1,14 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'dashboard', ssr: false, middleware: 'profile-required' })
 
-const { username, status, saveStatus, loadProfile } = useProfile()
+const { username, slug, status, isContactable, saveStatus, saveSlug, loadProfile } = useProfile()
 const { session } = useAuth()
 
 provide('saveStatus', saveStatus)
 
 const config = useRuntimeConfig()
 
-const publicUrl = computed(() => `${config.public.appUrl}/${username.value}`)
+const publicUrl = computed(() => `${config.public.appUrl}/${slug.value}`)
 const email = computed(() => session.value?.data?.user?.email ?? '')
 
 onMounted(() => loadProfile())
@@ -28,10 +28,14 @@ onMounted(() => loadProfile())
 
           <ProfileSettingsForm
             :username="username"
+            :slug="slug"
             :public-url="publicUrl"
             :email="email"
             :status="status"
+            :is-contactable="isContactable"
+            :save-slug="saveSlug"
             @update:status="status = $event"
+            @update:is-contactable="isContactable = $event"
           />
         </div>
       </div>

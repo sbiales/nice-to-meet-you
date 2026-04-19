@@ -1,8 +1,8 @@
-// server/api/profiles/me.patch.ts
-import { eq } from 'drizzle-orm'
+import { eq, and, ne } from 'drizzle-orm'
 import { auth } from '../../lib/auth'
 import { db } from '../../db'
 import { profiles } from '../../db/schema/profiles'
+import { validateUsername } from '../../../app/lib/username-validator'
 
 export default defineEventHandler(async (event) => {
   const session = await auth.api.getSession({ headers: event.headers })
@@ -46,6 +46,32 @@ export default defineEventHandler(async (event) => {
       throw createError({ statusCode: 400, message: 'status must be active, paused, or taken' })
     }
     updates.status = body.status as 'active' | 'paused' | 'taken'
+  }
+
+  if (body?.isContactable !== undefined) {
+    if (typeof body.isContactable !== 'boolean') {
+      throw createError({ statusCode: 400, message: 'isContactable must be a boolean' })
+    }
+    updates.isContactable = body.isContactable
+  }
+
+  if (body?.slug !== undefined) {
+    if (typeof body.slug !== 'string') {
+      throw createError({ statusCode: 400, message: 'slug must be a string' })
+    }
+    const slugValue = body.slug.toLowerCase().trim()
+    const validation = validateUsername(slugValue)
+    if (!validation.valid) {
+      throw createError({ statusCode: 400, message: 'Invalid slug format' })
+    }
+    const conflict = await db.query.profiles.findFirst({
+      where: and(eq(profiles.slug, slugValue), ne(profiles.userId, session.user.id)),
+      columns: { id: true },
+    })
+    if (conflict) {
+      throw createError({ statusCode: 409, message: 'That URL is already taken' })
+    }
+    updates.slug = slugValue
   }
 
   const [updated] = await db.update(profiles)

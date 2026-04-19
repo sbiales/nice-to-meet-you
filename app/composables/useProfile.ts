@@ -14,7 +14,9 @@ export function useProfile() {
   const taglinePrefix = ref<string | null>(null)
   const headerImageKey = ref<string | null>(null)
   const username = ref<string>('')
+  const slug = ref<string>('')
   const status = ref<'active' | 'paused' | 'taken'>('active')
+  const isContactable = ref<boolean>(true)
   const headerUploading = ref(false)
   const saveStatus = ref<SaveStatus>('idle')
   let saveTimer: ReturnType<typeof setTimeout> | null = null
@@ -30,9 +32,11 @@ export function useProfile() {
     taglinePrefix.value = typeof data.taglinePrefix === 'string' ? data.taglinePrefix : null
     headerImageKey.value = typeof data.headerImageKey === 'string' ? data.headerImageKey : null
     username.value = typeof data.username === 'string' ? data.username : ''
+    slug.value = typeof data.slug === 'string' ? data.slug : ''
     status.value = (typeof data.status === 'string' && ['active', 'paused', 'taken'].includes(data.status))
       ? (data.status as 'active' | 'paused' | 'taken')
       : 'active'
+    isContactable.value = typeof data.isContactable === 'boolean' ? data.isContactable : true
   }
 
   async function save() {
@@ -47,6 +51,7 @@ export function useProfile() {
           taglinePrefix: taglinePrefix.value,
           displayName: displayName.value.trim(),
           status: status.value,
+          isContactable: isContactable.value,
         },
       })
       saveStatus.value = 'saved'
@@ -55,6 +60,19 @@ export function useProfile() {
       }, 2000)
     } catch {
       saveStatus.value = 'error'
+    }
+  }
+
+  async function saveSlug(newSlug: string): Promise<{ error?: string }> {
+    try {
+      const result = await $fetch<Record<string, unknown>>('/api/profiles/me', {
+        method: 'PATCH',
+        body: { slug: newSlug },
+      })
+      slug.value = typeof result.slug === 'string' ? result.slug : newSlug
+      return {}
+    } catch (e: any) {
+      return { error: e?.data?.message ?? 'Failed to update URL' }
     }
   }
 
@@ -68,6 +86,7 @@ export function useProfile() {
   watch(taglinePrefix, scheduleSave)
   watch(displayName, scheduleSave)
   watch(status, scheduleSave)
+  watch(isContactable, scheduleSave)
 
   async function uploadHeaderImage(file: File) {
     headerUploading.value = true
@@ -136,10 +155,13 @@ export function useProfile() {
     taglinePrefix,
     headerImageKey,
     username,
+    slug,
     status,
+    isContactable,
     headerUploading,
     saveStatus,
     loadProfile,
+    saveSlug,
     uploadHeaderImage,
     addBlock,
     updateBlockData,

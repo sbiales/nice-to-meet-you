@@ -37,30 +37,14 @@ function toUsernameSlug(value: string): string {
 }
 
 const form = reactive({ username: '', displayName: '' })
-
-watch(user, (u) => {
-  if (!u) return
-  if (!form.username) {
-    form.username = toUsernameSlug(u.email ?? '')
-  }
-  if (!form.displayName) {
-    form.displayName = (u.name ?? toUsernameSlug(u.email ?? '')).slice(0, 60)
-  }
-}, { immediate: true })
-
-const usernameValidation = computed(() => validateUsername(form.username))
-const usernameFormatError = computed(() =>
-  form.username ? usernameErrorMessage(usernameValidation.value) : ''
-)
-
 const usernameAvailable = ref<boolean | null>(null)
 const checkingUsername = ref(false)
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
 
-watch(() => form.username, (username) => {
+function scheduleUsernameCheck(username: string) {
   usernameAvailable.value = null
   if (debounceTimer) clearTimeout(debounceTimer)
-  if (!username || !usernameValidation.value.valid) return
+  if (!username || !validateUsername(username).valid) return
 
   checkingUsername.value = true
   debounceTimer = setTimeout(async () => {
@@ -73,7 +57,25 @@ watch(() => form.username, (username) => {
       checkingUsername.value = false
     }
   }, 300)
-})
+}
+
+watch(user, (u) => {
+  if (!u) return
+  if (!form.username) {
+    form.username = toUsernameSlug(u.email ?? '')
+    scheduleUsernameCheck(form.username)
+  }
+  if (!form.displayName) {
+    form.displayName = (u.name ?? toUsernameSlug(u.email ?? '')).slice(0, 60)
+  }
+}, { immediate: true })
+
+const usernameValidation = computed(() => validateUsername(form.username))
+const usernameFormatError = computed(() =>
+  form.username ? usernameErrorMessage(usernameValidation.value) : ''
+)
+
+watch(() => form.username, scheduleUsernameCheck)
 
 const usernameError = computed(() => {
   if (usernameFormatError.value) return usernameFormatError.value

@@ -3,6 +3,7 @@ import { auth } from '../../lib/auth'
 import { db } from '../../db'
 import { profiles } from '../../db/schema/profiles'
 import { validateUsername } from '../../../app/lib/username-validator'
+import { generateSlug } from '../../lib/slug'
 
 export default defineEventHandler(async (event) => {
   const session = await auth.api.getSession({ headers: event.headers })
@@ -27,7 +28,6 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, message: 'Display name must be 60 characters or fewer' })
   }
 
-  // Prevent duplicate profile for this user
   const existingProfile = await db.query.profiles.findFirst({
     where: eq(profiles.userId, session.user.id),
     columns: { id: true },
@@ -36,7 +36,6 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 409, message: 'Profile already exists for this account' })
   }
 
-  // Check username availability
   const takenUsername = await db.query.profiles.findFirst({
     where: eq(profiles.username, username),
     columns: { id: true },
@@ -45,9 +44,12 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 409, message: 'Username is already taken' })
   }
 
+  const slug = await generateSlug(username)
+
   const [profile] = await db.insert(profiles).values({
     userId: session.user.id,
     username,
+    slug,
     displayName,
   }).returning()
 

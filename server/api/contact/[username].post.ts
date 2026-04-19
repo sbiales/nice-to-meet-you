@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const profile = await db.query.profiles.findFirst({
-    where: eq(profiles.username, username),
+    where: eq(profiles.slug, username),
   })
 
   if (!profile || profile.deletedAt) {
